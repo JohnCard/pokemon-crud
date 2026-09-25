@@ -1,6 +1,13 @@
+// Incremental counter to generate unique IDs for new user cards.
+let idSetter = 10;
+// Increments idSetter by one.
+const incrementId = () => idSetter += 1
+const h1 = document.querySelector('h1')
+const successAlert = document.getElementById('success-alert')
+const failedAlert = document.getElementById('failed-alert')
 // we will use this variable for updateUser (arrow function) and delete fetch requests, to specify the user´s id at final endpoint
 let idUser = null
-// function to set new id for user at for endpoint in update and delete fetch/requests
+// function to set new id for user for endpoint in update and delete fetch/requests
 function setUserId(id){
     idUser = id
 }
@@ -25,7 +32,7 @@ const gaffet = (user) => {
                     <li class="list-group-item">${city}</li>
                     <li class="list-group-item">${zipcode}</li>
                 </ul>
-                <p class="card-text">phone - ${phone.replace('.','-')}</p>
+                <p class="card-text">phone - ${phone}</p>
                 <p class="card-text">website - ${website}</p>
             </div>
             <div class="card-footer">
@@ -36,6 +43,7 @@ const gaffet = (user) => {
     </div>
     `
 }
+
 //* html elements & user (.row) div container
 const createForm = document.getElementById('user-form')
 const updateForm = document.getElementById('update-form')
@@ -65,9 +73,39 @@ const updateUser = (endpoint, body) => {
         return response.json()
     })
     //* show complete data
-    .then(data => console.log(data))
+    .then(data => {
+        // pull html items to update its content
+        const userCard = document.getElementById(idUser).children[0]
+        const title = userCard.children[0].children[0]
+        const username = userCard.children[0].children[1]
+        const email = userCard.children[1].children[0]
+        const street = userCard.children[1].children[3].children[0]
+        const company = userCard.children[1].children[1]
+        const phone = userCard.children[1].children[4]
+        const website = userCard.children[1].children[5]
+        title.innerText = data.name
+        username.innerText = `known as ${data.username}`
+        email.innerText = data.email
+        street.innerText = data.street
+        company.innerText = `Company - ${data.company}`
+        phone.innerText = `phone - ${data.phone_number}`
+        website.innerText = `website - ${data.website}`
+        //* show successful message for updated user
+        successAlert.textContent = `${data.name} user updated successfully!`
+        successAlert.classList.add('show-alert')
+        setTimeout(() => {
+            successAlert.classList.remove('show-alert')
+        }, 3000)
+    })
     //! catch error? console to see details
-    .catch(error => console.error(error))
+    .catch(error => {
+        failedAlert.textContent = 'Not validated data/request'
+        failedAlert.classList.add('show-alert')
+        console.error(error)
+        setTimeout(() => {
+            failedAlert.classList.remove('show-alert')
+        }, 3000)
+    })
     .finally(() => {
         // reset every fields typed by user
         document.getElementById('name').value = ''
@@ -84,22 +122,35 @@ const updateUser = (endpoint, body) => {
 //* pull users data section
 fetch(baseEndpoint)
 .then(response => {
+    h1.textContent = 'On loading...'
     if(!response.ok){
         throw new Error('Failed request')
     }
     return response.json()
 })
 .then(data => {
+    // * set show-alert class to success div message for loaded users data
+    successAlert.classList.add('show-alert')
+    successAlert.textContent = 'users data loaded successfully!'
     // map data to format every user as a gaffet
     let formattedData = data.map(user => gaffet(user))
     // join formattedData items without any character
     formattedData = formattedData.join('')
     // insert div.card items into usersContainer (div.row)
     usersContainer.innerHTML = formattedData
+    setTimeout(() => {
+        successAlert.classList.remove('show-alert')
+    }, 3000)
+    h1.textContent = 'Users CRUD'
 })
-.catch(error => console.error(error))
+.catch(error => {
+    console.error(error)
+    h1.textContent = 'Failed request'
+})
 // this request has finally ended
-.finally(() => console.log('successful request'))
+.finally(() => {
+    console.log('ended request')
+})
 //* update users section
 updateForm.addEventListener('submit', e => {{
     e.preventDefault()
@@ -133,8 +184,15 @@ deleteForm.addEventListener('submit', e => {
         // specify delete method to prevent get default
         method: 'delete'
     })
-    .then(response => response.json())
-    .then(data => console.log(data))
+    .then(() => {
+        const item = document.getElementById(idUser)
+        item.remove()
+        successAlert.textContent = 'Removed item successfully'
+        successAlert.classList.add('show-alert')
+        setTimeout(() => {
+            successAlert.classList.remove('show-alert')
+        }, 3000)
+    })
     .catch(error => console.log(error))
     // set user to null value
     .finally(() => setUserId(null))
@@ -155,8 +213,14 @@ createForm.addEventListener('submit', e => {
         name: name,
         username: username,
         email: email,
-        company: company,
-        street: street,
+        company: {
+            name: company
+        },
+        address: {
+            street: street,
+            city: "new city example",
+            zipcode: "92998-3874 (created)"
+        },
         phone_number: phoneNumber,
         website: website
     }
@@ -175,8 +239,24 @@ createForm.addEventListener('submit', e => {
         if(!response.ok) throw new Error('Failed request')
         return response.json()
     })
-    .then(data => console.log(data))
-    .catch(error => console.error(error))
+    .then(data => {
+        incrementId()
+        successAlert.textContent = `${data.name} user created successfully!`
+        const newUser = {...data, id: idSetter}
+        successAlert.classList.add('show-alert')
+        usersContainer.innerHTML += gaffet(newUser)
+        setTimeout(() => {
+            successAlert.classList.remove('show-alert')
+        }, 3000)
+    })
+    .catch(error => {
+        failedAlert.textContent = 'Not validated data/request'
+        failedAlert.classList.add('show-alert')
+        console.error(error)
+        setTimeout(() => {
+            failedAlert.classList.remove('show-alert')
+        }, 3000)
+    })
     .finally(() => {
         // reset form values
         document.getElementById('name-field').value = ''
