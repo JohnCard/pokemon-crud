@@ -1,4 +1,4 @@
-// user templates
+// user template
 const userTemplate = (user) => {
     const {name, username, email, address, phone, company} = user
     const {city, street} = address

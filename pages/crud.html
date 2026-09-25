@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../img/users.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <title>users crud</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">React challenges</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./crud.html">User crud</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- * create modal -->
+    <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="postModalLabel">Update user</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"  aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="user-form">
+                        <div class="row row-gap-3">
+                            <div class="col-12 col-md-6">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name-field" aria-label="name-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username-field" aria-label="username-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email-field" aria-label="email-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="company" class="form-label">Company name</label>
+                                <input type="text" class="form-control" id="company-field" aria-label="company-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="street" class="form-label">Street</label>
+                                <input type="text" class="form-control" id="street-field" aria-label="street-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="phone-number" class="form-label">Phone number</label>
+                                <input type="tel" class="form-control" id="phone-number-field" aria-label="phone-number-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="website" class="form-label">Website</label>
+                                <input type="url" class="form-control" id="website-field" aria-label="website-label">
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * update modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="updateModalLabel">Update user</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-form">
+                        <div class="row row-gap-2">
+                            <div class="col-12 col-md-6">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" aria-label="name-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" aria-label="username-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" aria-label="email-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="company" class="form-label">Company name</label>
+                                <input type="text" class="form-control" id="company" aria-label="company-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="street" class="form-label">Street</label>
+                                <input type="text" class="form-control" id="street" aria-label="street-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="phone-number" class="form-label">Phone number</label>
+                                <input type="tel" class="form-control" id="phone-number" aria-label="phone-number-label">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="website" class="form-label">Website</label>
+                                <input type="url" class="form-control" id="website" aria-label="website-label">
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * delete modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="deleteModalLabel">Are you sure to delete this user?</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            <div class="modal-body">
+                <form id="delete-form">
+                    <div class="row">
+                        <div class="col-10 col-md-4">
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Save changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- todo main section -->
+    <main class="mb-4">
+        <div class="container">
+            <h1>USER Crud</h1>
+            <button type="button" class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#postModal">Create new user</button>
+            <div class="row row-gap-3" id="users-container"></div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="../scripts/crud.js"></script>
+</body>
+</html>
